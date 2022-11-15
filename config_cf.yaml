@@ -1,0 +1,19 @@
+## Configuration for the training, evaluation
+samples:
+
+  - name: jsns2_vertex
+    label: 1
+    path: /store/hep/users/yewzzang/JSNS2/cf_data/*.h5
+#     path: /store/hep/users/yewzzang/JSNS2/cf_data/r001513_cf_data_00000.h5
+    xsec: 1
+    ngen: 1
+
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 2
+
+    splitFractions: [0, 0] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-4

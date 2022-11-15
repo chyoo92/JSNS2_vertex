@@ -1,0 +1,62 @@
+## Configuration for the training, evaluation
+samples:
+
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_1MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_2MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_3MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_4MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_5MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_6MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_7MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_8MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_9MeV_2.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1102/combined_10MeV_2.h5
+    xsec: 1
+    ngen: 1
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 16
+
+    splitFractions: [0.6, 0.2] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-3

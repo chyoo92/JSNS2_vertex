@@ -1,0 +1,18 @@
+## Configuration for the training, evaluation
+samples:
+
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/sphere_0920_100k_50E_mc.csv
+    xsec: 1
+    ngen: 1
+
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 4
+
+    splitFractions: [0.6, 0.2] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-4
