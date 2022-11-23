@@ -30,15 +30,12 @@ class DGCNN6_4(nn.Module):
         self.conv1 = DynamicEdgeConv(torch.nn.Sequential(
                 torch.nn.Linear(4 * 2, 64),
                 torch.nn.LeakyReLU(),
-                torch.nn.Linear(64, 64),
-                torch.nn.LeakyReLU(),
-                torch.nn.Linear(64, 64),
-                torch.nn.LeakyReLU(),
-            ), 25, 'add')
+
+            ), 15, 'add')
         self.conv2 = DynamicEdgeConv(torch.nn.Sequential(
-                torch.nn.Linear(64 * 2, 128),
+                torch.nn.Linear(64 * 2, 64),
                 torch.nn.LeakyReLU(),
-             ), 25, 'add')
+             ), 15, 'add')
         self.lin1 = Linear(64*3, 1024)
 
  
@@ -62,7 +59,8 @@ class DGCNN6_4(nn.Module):
         
         x1 = self.conv1(xx, batch)
         x2 = self.conv2(x1, batch)
-        out = self.lin1(torch.cat([x1, x2], dim=1))
+        x3 = self.conv2(x2, batch)
+        out = self.lin1(torch.cat([x1, x2, x3], dim=1))
         out = global_mean_pool(out, batch)
         out = self.mlp(out)
 

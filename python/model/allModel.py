@@ -29,6 +29,10 @@ from model.DGCNN11 import *
 from model.DGCNN6_2 import *
 from model.DGCNN6_3 import *
 from model.DGCNN6_4 import *
+from model.DGCNN6_homo import *
+from model.DGCNN6_homo2 import *
+
+
 from model.GNN1layer_wf import *
 from model.GNN2layer_wf import *
 from model.GNN3layer_wf import *
