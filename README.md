@@ -2,20 +2,20 @@
 ## Run
 ### waveform input
 
---config : config file (ex. config.yaml)
--o : output folder name (ex. test)
---device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
---epoch : train epoch num
---batch : train batch size
---lr : learning rate
---seed : data split random number
---model : train model
---fea : input data feature num (ex. waveform : 248 / charge : 1)
---cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
+- --config : config file (ex. config.yaml)
+- -o : output folder name (ex. test)
+- --device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
+- --epoch : train epoch num
+- --batch : train batch size
+- --lr : learning rate
+- --seed : data split random number
+- --model : train model
+- --fea : input data feature num (ex. waveform : 248 / charge : 1)
+- --cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
 
-ex1) python train_script.py --config config.yaml -o test --device 0 --epoch 200 --batch 64 --lr 1e-4 --seed 12345 --model model --fea 248 --cla 3
+- ex1) python train_script.py --config config.yaml -o test --device 0 --epoch 200 --batch 64 --lr 1e-4 --seed 12345 --model model --fea 248 --cla 3
 
-python eval_script.py --config config.yaml -o test --device 0 --seed 12345 --batch 1
+- python eval_script.py --config config.yaml -o test --device 0 --seed 12345 --batch 1
 
 
 
