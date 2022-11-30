@@ -1,22 +1,23 @@
 # JSNS2 Vertex Reconstruction with GNN 
-## Run
-### waveform input
-
-##### train python train_script.py --config config.yaml -o test --device 0 --epoch 200 --batch 64 --lr 1e-4 --seed 12345 --model model --fea 248 --cla 3
-##### python eval_script.py --config config.yaml -o test --device 0 --seed 12345 --batch 1
-##### condition
-
-    - --config : config file (ex. config.yaml)
-    - -o : output folder name (ex. test)
-    - --device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
-    - --epoch : train epoch num
-    - --batch : train batch size
-    - --lr : learning rate
-    - --seed : data split random number
-    - --model : train model
-    - --fea : input data feature num (ex. waveform : 248 / charge : 1)
-    - --cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
-
+# Run
+## waveform input
+### Run script example
+    train python train_script.py --config config.yaml -o test --device 0 --epoch 200 --batch 64 --lr 1e-4 --seed 12345 --model model --fea 248 --cla 3 --geo 1 --dtype 1 --itype 3
+    python eval_script.py --config config.yaml -o test --device 0 --seed 12345 --batch 1
+### condition
+    --config : config file (ex. config.yaml)
+    -o : output folder name (ex. test)
+    --device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
+    --epoch : train epoch num
+    --batch : train batch size
+    --lr : learning rate
+    --seed : data split random number
+    --model : train model
+    --fea : input data feature num (ex. waveform : 248 / charge : 1)
+    --cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
+    --geo : detector geometry (0: jsns2 120 / 1 : jsns2 96 / 2 : sphere mc / 3 : cylinder mc)
+    --dtype : dataset type
+    --itype : input type
 
 
 
@@ -27,19 +28,20 @@
 
 #### vertexdataset all same. it just too lazy to create input conditions.....
 - python/model : GNN models
-- python/dataset/vertexdataset.py : use highwf dataset
-- python/dataset/vertexdataset2.py : use lowwf dataset
-- python/dataset/vertexdataset3.py : use sumwf dataset
+- python/dataset/vertexdataset.py : waveform dataset script
 
 
 
-vertexdataset.py
-vertexdataset2.py
-vertexdataset3.py
+
+
+
+
 vertexdataset_cf_ch.py
 vertexdataset_cf_data.py
 vertexdataset_cf_wf.py
 vertexdataset_mc.py
+
+
 vertexdataset_mc10.py
 vertexdataset_mc2.py
 vertexdataset_mc3.py
@@ -49,9 +51,13 @@ vertexdataset_mc6.py
 vertexdataset_mc7.py
 vertexdataset_mc8.py
 vertexdataset_mc9.py
+
+
 vertexdataset_mc_h5.py
 vertexdataset_mc_h5_2.py
 vertexdataset_mc_h5_3.py
+
+
 vertexdataset_real_data.py
 
 

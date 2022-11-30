@@ -33,6 +33,11 @@ parser.add_argument('--cla', action='store', type=int, default=3, help='# class'
 parser.add_argument('--device', action='store', type=int, default=0, help='device name')
 parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
 parser.add_argument('--seed', action='store', type=int, default=12345, help='random seed')
+parser.add_argument('--geo', action='store', type=int, default=1, help='geometry')
+parser.add_argument('--dtype', action='store', type=int, default=1, help='dataset type')
+parser.add_argument('--itype', action='store', type=int, default=1, help='input data type 0=charge, 1=high, 2 = low, 3=sum')
+
+
 args = parser.parse_args()
 
 config = yaml.load(open(args.config).read(), Loader=yaml.FullLoader)
@@ -50,9 +55,9 @@ dset = vertexdataset()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']
-    dset.addSample(name, sampleInfo['path'], weight=sampleInfo['xsec']/sampleInfo['ngen'])
+    dset.addSample(name, sampleInfo['path'], weight=1)
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize()
+dset.initialize(args.geo, args.itype)
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
 lengths.append(len(dset)-sum(lengths))
 torch.manual_seed(config['training']['randomSeed1'])
