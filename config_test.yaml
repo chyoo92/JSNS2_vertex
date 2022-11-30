@@ -3,12 +3,12 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_00*.h5
+    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_000000.h5
     xsec: 0.012
     ngen: 11952188
   - name: jsns2_vertex
     label: 1
-    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_01*.h5
+    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_00000.h5
     xsec: 0.012
     ngen: 11952188
 
