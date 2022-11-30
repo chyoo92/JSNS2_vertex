@@ -36,6 +36,7 @@ parser.add_argument('--seed', action='store', type=int, default=12345, help='ran
 parser.add_argument('--geo', action='store', type=int, default=1, help='geometry')
 parser.add_argument('--dtype', action='store', type=int, default=1, help='dataset type')
 parser.add_argument('--itype', action='store', type=int, default=1, help='input data type 0=charge, 1=high, 2 = low, 3=sum')
+parser.add_argument('--ftype', action='store', type=int, default=1, help='file type 0 = csv / 1 = h5')
 
 
 args = parser.parse_args()
@@ -57,7 +58,7 @@ for sampleInfo in config['samples']:
     name = sampleInfo['name']
     dset.addSample(name, sampleInfo['path'], weight=1)
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize(args.geo, args.itype)
+dset.initialize(args.geo, args.itype, args.ftype)
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
 lengths.append(len(dset)-sum(lengths))
 torch.manual_seed(config['training']['randomSeed1'])
