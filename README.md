@@ -2,8 +2,8 @@
 # Run
 ## waveform input
 ### Run script example
-    train python train_script.py --config config.yaml -o test --device 0 --epoch 200 --batch 64 --lr 1e-4 --seed 12345 --model model --fea 248 --cla 3 --geo 1 --dtype 1 --itype 3
-    python eval_script.py --config config.yaml -o test --device 0 --seed 12345 --batch 1
+    train python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --dtype # --itype #
+    python eval_script.py --config config.yaml -o test --device # --seed # --batch # --geo # --dtype # --itype #
 ### condition
     --config : config file (ex. config.yaml)
     -o : output folder name (ex. test)
