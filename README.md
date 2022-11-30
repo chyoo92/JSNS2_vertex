@@ -2,7 +2,7 @@
 # Run
 ## waveform input
 ### Run script example
-    train python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --dtype # --itype #
+    python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --dtype # --itype #
     python eval_script.py --config config.yaml -o test --device # --seed # --batch # --geo # --dtype # --itype #
 ### condition
     --config : config file (ex. config.yaml)
@@ -28,7 +28,7 @@
 
 #### vertexdataset all same. it just too lazy to create input conditions.....
 - python/model : GNN models
-- python/dataset/vertexdataset.py : waveform dataset script
+- python/dataset/vertexdataset.py : dataset processing script
 
 
 
@@ -39,18 +39,9 @@
 vertexdataset_cf_ch.py
 vertexdataset_cf_data.py
 vertexdataset_cf_wf.py
+
 vertexdataset_mc.py
 
-
-vertexdataset_mc10.py
-vertexdataset_mc2.py
-vertexdataset_mc3.py
-vertexdataset_mc4.py
-vertexdataset_mc5.py
-vertexdataset_mc6.py
-vertexdataset_mc7.py
-vertexdataset_mc8.py
-vertexdataset_mc9.py
 
 
 vertexdataset_mc_h5.py
