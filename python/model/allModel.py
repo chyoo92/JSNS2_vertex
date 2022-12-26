@@ -26,8 +26,12 @@ from model.DGCNN8 import *
 from model.DGCNN9 import *
 from model.DGCNN10 import *
 from model.DGCNN11 import *
+from model.DGCNN12 import *
 from model.DGCNN6_2 import *
 from model.DGCNN6_3 import *
 from model.DGCNN6_4 import *
 from model.DGCNN6_homo import *
 from model.DGCNN6_homo2 import *
+from model.DGCNN6_homo3 import *
+
+from model.DGCNN6_homo4 import *

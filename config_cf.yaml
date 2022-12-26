@@ -3,7 +3,7 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /store/hep/users/yewzzang/JSNS2/cf_data/*.h5
+    path: /store/hep/users/yewzzang/JSNS2/cf_data_pair/*.h5
 #     path: /store/hep/users/yewzzang/JSNS2/cf_data/r001513_cf_data_00000.h5
     xsec: 1
     ngen: 1

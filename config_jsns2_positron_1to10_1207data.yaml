@@ -1,0 +1,63 @@
+## Configuration for the training, evaluation
+samples:
+
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_1MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_2MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_3MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_4MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_5MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_6MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_7MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_8MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_9MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_10MeV.h5
+    xsec: 1
+    ngen: 1
+   
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 16
+
+    splitFractions: [0.6, 0.2] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-3

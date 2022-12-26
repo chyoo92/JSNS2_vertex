@@ -41,10 +41,12 @@ class vertexdataset(PyGDataset):
         feature = torch.Tensor(self.featureList[fileIdx][idx])
         jvertex = torch.Tensor(self.jvtxList[fileIdx][idx])
         energys = torch.Tensor(self.energyList[fileIdx][idx])
+        t_charge = torch.Tensor(self.totalcharge[fileIdx][idx])
         
         data = PyGData(x = feature, pos = pos, y = vertex)
         data.jvtx = jvertex
         data.energy = energys
+        data.tq = t_charge
    
 
         return data
@@ -83,6 +85,7 @@ class vertexdataset(PyGDataset):
         self.procList = []
         self.jvtxList = []
         self.energyList = []
+        self.totalcharge = []
         
         
         nFiles = len(self.sampleInfo)
@@ -95,11 +98,13 @@ class vertexdataset(PyGDataset):
                 nEvent = len(np.array(f))
             elif ftype == 1:
                 f = h5py.File(fName,'r', libver='latest', swmr=True)['events']
-                keys = f.keys()
-                nEvent = len(str(keys)[15:-2].split(',')[-2])
-  
+#                 keys = f.keys()
+        
+#                 nEvent = np.array(f[str(keys)[15:-2].split(',')[-2][2:-1]]).shape[0]
+                nEvent = len(f['pmtQ'])
+              
             self.sampleInfo.loc[i, 'nEvent'] = nEvent
-            
+  
             if geo == 1:
                 pos_file = 'python/detector_geometry/jsns_geometry_pos.csv'
             elif geo == 2:
@@ -117,7 +122,7 @@ class vertexdataset(PyGDataset):
             pos = []
             j_vtx = []
             energy = []
-            
+            total_ch = []
             
             for j in range(nEvent):
                 
@@ -155,17 +160,22 @@ class vertexdataset(PyGDataset):
                     elif itype == 0:
                         
                         featurelist.append(f['pmtQ'][j][0:96].reshape(-1,1))
-
-                        vtx.append(f['vertex'][j])
+                        
+                        total_ch.append(np.ones([96,1])*np.array(f['pmtQ'][j][0:96].sum()))
+                        vtx.append(f['vertex'][j]/1000)
 
                         pos.append(np.array(ff))
                         if len(f['jade_vertex'][j]) > 0:
                             j_vtx.append(f['jade_vertex'][j])
                         else:
                             j_vtx.append([0,0,0])
+                        if fName.split('_')[-1][:-6].isnumeric() == True:
+                            energy.append([int(fName.split('_')[-1][:-6])])
+                        else:    
+                            
+                            energy.append([0])
                         
-                        energy.append([int(fName.split('_')[-2][:-3])])
-                        
+                            
                
                 #### csv file 
                 elif ftype == 0:
@@ -183,15 +193,20 @@ class vertexdataset(PyGDataset):
                 self.posList.append(pos)
                 self.jvtxList.append(j_vtx)
                 self.energyList.append(energy)
-            
+                self.totalcharge.append(total_ch)
             elif ftype == 0:
                 self.featureList.append(np.array(f)[:,17:17+len(ff)].reshape(-1,len(ff),1).tolist())
                 self.vtxList.append(np.array(f)[:,10:13].tolist())
                 self.posList.append(pos)
-            
-            procIdx = procNames.index(self.sampleInfo['procName'][i])
-            self.procList.append(torch.ones(nEvent, dtype=torch.int32, requires_grad=False)*procIdx)
-        ## Compute cumulative sums of nEvent, to be used for the file indexing
+        
+#         SI = self.sampleInfo
+#         #### save sampleInfo file in train result path
+#         SI.to_csv(self.output + '/sampleInfo.csv')
+        
+        
+        procIdx = procNames.index(self.sampleInfo['procName'][i])
+        self.procList.append(torch.ones(nEvent, dtype=torch.int32, requires_grad=False)*procIdx)
+    ## Compute cumulative sums of nEvent, to be used for the file indexing
         self.maxEventsList = np.concatenate(([0.], np.cumsum(self.sampleInfo['nEvent'])))
 
         ## Find rescale factors - make average weight to be 1 for each cat in the training step

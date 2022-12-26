@@ -37,7 +37,7 @@ parser.add_argument('--itype', action='store', type=int, default=1, help='input 
 parser.add_argument('--ftype', action='store', type=int, default=1, help='file type 0 = csv / 1 = h5')
 
 
-models = ['GNN1layer', 'GNN2layer','GNN3layer', 'GNN4layer','GNN10layer','GNN11layer','GNN12layer','GNN13layer','GNN22layer','GNN33layer','GNN44layer','GNN55layer','GNN1010layer','GNN5layer','DGCNN','DGCNN2','DGCNN3','DGCNN4','DGCNN5','DGCNN6','DGCNN7','DGCNN8','DGCNN9','DGCNN10','DGCNN11','DGCNN6_2','DGCNN6_3','DGCNN6_4','DGCNN6_homo','DGCNN6_homo2','GNN963layer']
+models = ['GNN1layer', 'GNN2layer','GNN3layer', 'GNN4layer','GNN10layer','GNN11layer','GNN12layer','GNN13layer','GNN22layer','GNN33layer','GNN44layer','GNN55layer','GNN1010layer','GNN5layer','DGCNN','DGCNN2','DGCNN3','DGCNN4','DGCNN5','DGCNN6','DGCNN7','DGCNN8','DGCNN9','DGCNN10','DGCNN11','DGCNN12','DGCNN6_2','DGCNN6_3','DGCNN6_4','DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','GNN963layer']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
 
@@ -120,6 +120,7 @@ for epoch in range(nEpoch):
     
     for i, data in enumerate(tqdm(trnLoader, desc='epoch %d/%d' % (epoch+1, nEpoch))):
         data = data.to(device)
+       
         
         
         label = data.y.float().to(device=device) ### vertex

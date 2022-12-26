@@ -106,13 +106,16 @@ features = []
 batch_size = []
 real_weights = []
 scales = []
-
+jade_vertexs = []
 eval_resampling = []
 eval_real = []
 model.eval()
+ens = []
 val_loss, val_acc = 0., 0.
 # for i, (data, label0, weight, rescale, procIdx, fileIdx, idx, dT, dVertex, vertexX, vertexY, vertexZ) in enumerate(tqdm(testLoader)):
 for i, data in enumerate(tqdm(testLoader)):
+    
+    
     
     data = data.to(device)
     label = data.y.float().to(device=device) ### vertex
@@ -120,21 +123,27 @@ for i, data in enumerate(tqdm(testLoader)):
     label = label.reshape(-1,3)
     pred = model(data)
 
-   
+    jade_vertexs.extend([x.item() for x in data.jvtx.view(-1)])
     labels.extend([x.item() for x in label.view(-1)])
 
     preds.extend([x.item() for x in pred.view(-1)])
     batch_size.append(data.x.shape[0])
+    
+    ens.extend([x.item() for x in data.energy.view(-1)])
 
-df = pd.DataFrame({'prediction':preds, 'label':labels})
+df = pd.DataFrame({'prediction':preds, 'label':labels,'jade':jade_vertexs})
 fPred = 'result/' + args.output + '/' + args.output + '.csv'
 df.to_csv(fPred, index=False)
 
 
-df2 = pd.DataFrame({'batch':batch_size})
+df2 = pd.DataFrame({'batch':batch_size,'energy':ens})
 fPred2 = 'result/' + args.output + '/' + args.output + '_batch.csv'
 df2.to_csv(fPred2, index=False)
 
+    
+    
+    
+    
     
     
     
