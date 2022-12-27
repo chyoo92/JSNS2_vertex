@@ -120,11 +120,11 @@ for epoch in range(nEpoch):
     
     for i, data in enumerate(tqdm(trnLoader, desc='epoch %d/%d' % (epoch+1, nEpoch))):
         data = data.to(device)
-       
+
         
         
         label = data.y.float().to(device=device) ### vertex
-      
+
         label = label.reshape(-1,3)
         pred = model(data)
 

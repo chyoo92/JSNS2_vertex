@@ -106,14 +106,14 @@ for i in range(4869):
     kwargs = {'dtype':'f4', 'compression':'lzf'}
     #     with h5py.File(output_path, 'w', libver='latest', swmr=True) as fout:
 
-    with h5py.File(output_name, 'w', libver='latest', swmr=True) as fout:
-        m = fout.create_group('info')
-        m.create_dataset('shape', data=[96, 248], dtype='i4')
+#     with h5py.File(output_name, 'w', libver='latest', swmr=True) as fout:
+#         m = fout.create_group('info')
+#         m.create_dataset('shape', data=[96, 248], dtype='i4')
 
-        g = fout.create_group('events')
-        g.create_dataset('trigID', data=all_trig, dtype='i4')
-        g.create_dataset('vtx', data=all_vtx, chunks=(1,3),dtype='f8')
-        g.create_dataset('timetag', data=times, chunks=(1,28), **kwargs)
-        g.create_dataset('high', data=pmts_high, chunks=(1, 96, 248), **kwargs)
-#         g.create_dataset('low', data=pmts_low, chunks=(1, 96, 248), **kwargs)
-    print(i)
+#         g = fout.create_group('events')
+#         g.create_dataset('trigID', data=all_trig, dtype='i4')
+#         g.create_dataset('vtx', data=all_vtx, chunks=(1,3),dtype='f8')
+#         g.create_dataset('timetag', data=times, chunks=(1,28), **kwargs)
+#         g.create_dataset('high', data=pmts_high, chunks=(1, 96, 248), **kwargs)
+# #         g.create_dataset('low', data=pmts_low, chunks=(1, 96, 248), **kwargs)
+#     print(i)
