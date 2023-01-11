@@ -102,9 +102,9 @@ class vertexdataset(PyGDataset):
         
 #                 nEvent = np.array(f[str(keys)[15:-2].split(',')[-2][2:-1]]).shape[0]
                 nEvent = len(f['pmtQ'])
-              
+
             self.sampleInfo.loc[i, 'nEvent'] = nEvent
-  
+
             if geo == 1:
                 pos_file = 'python/detector_geometry/jsns_geometry_pos.csv'
             elif geo == 2:

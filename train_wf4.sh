@@ -7,11 +7,6 @@
 ##'file type 0 = csv / 1 = h5'
 
 
-python train_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml -o 20221211_6ly_tq --device 3 --epoch 10000 --batch 256 --lr 1e-4 --seed 12345 --model DGCNN12 --fea 2 --cla 3 --geo 1 --itype 0 --ftype 1
+python train_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml -o 20230104_mse_sum4 --device 3 --epoch 3000 --batch 256 --lr 1e-4 --seed 12345 --model DGCNN6_homo4 --fea 2 --cla 3 --geo 1 --itype 0 --ftype 1
 
-python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20221211_6ly_tq --device 3 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1
-
-
-python train_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml -o 20221211_6ly_lr5_tq --device 3 --epoch 10000 --batch 256 --lr 1e-5 --seed 12345 --model DGCNN12 --fea 2 --cla 3 --geo 1 --itype 0 --ftype 1
-
-python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20221211_6ly_lr5_tq --device 3 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1
+python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20230104_mse_sum4 --device 3 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1 --cla 3

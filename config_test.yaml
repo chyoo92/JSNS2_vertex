@@ -3,13 +3,19 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_000000.h5
-
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_3MeV.h5
+    xsec: 1
+    ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /store/hep/users/yewzzang/JSNS2/vertex/h5_file/r001563_vertex_00000.h5
-
-
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_4MeV.h5
+    xsec: 1
+    ngen: 1
+  - name: jsns2_vertex
+    label: 1
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_5MeV.h5
+    xsec: 1
+    ngen: 1
 training:
     randomSeed1: 12345
     nDataLoaders: 4

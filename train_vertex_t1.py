@@ -37,7 +37,7 @@ parser.add_argument('--itype', action='store', type=int, default=1, help='input 
 parser.add_argument('--ftype', action='store', type=int, default=1, help='file type 0 = csv / 1 = h5')
 
 
-models = ['GNN1layer', 'GNN2layer','GNN3layer', 'GNN4layer','GNN10layer','GNN11layer','GNN12layer','GNN13layer','GNN22layer','GNN33layer','GNN44layer','GNN55layer','GNN1010layer','GNN5layer','DGCNN','DGCNN2','DGCNN3','DGCNN4','DGCNN5','DGCNN6','DGCNN7','DGCNN8','DGCNN9','DGCNN10','DGCNN11','DGCNN12','DGCNN6_2','DGCNN6_3','DGCNN6_4','DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','GNN963layer']
+models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
 
@@ -95,6 +95,7 @@ if args.device >= 0 and torch.cuda.is_available():
 ##### Define optimizer instance #####
 optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
 
+# optm = optim.AdamW(model.parameters(), lr=config['training']['learningRate'])
 
 
 ##### Start training #####
@@ -128,7 +129,9 @@ for epoch in range(nEpoch):
         label = label.reshape(-1,3)
         pred = model(data)
 
-        crit = torch.nn.MSELoss() ### sacledweight np.abs()
+        # crit = torch.nn.MSELoss(reduction='sum') ### sacledweight np.abs()
+        crit = torch.nn.L1Loss()
+        # crit = torch.nn.MSELoss()
 
         loss = crit(pred, label)
         loss.backward()
@@ -142,7 +145,7 @@ for epoch in range(nEpoch):
         trn_loss += loss.item()*ibatch
 
         
-        
+
     trn_loss /= nProcessed 
 
     print(trn_loss,'trn_loss')
@@ -158,7 +161,9 @@ for epoch in range(nEpoch):
         label = label.reshape(-1,3)
         pred = model(data)
 
-        crit = torch.nn.MSELoss()
+        # crit = torch.nn.MSELoss(reduction='sum') ### sacledweight np.abs()
+        crit = torch.nn.L1Loss()
+        # crit = torch.nn.MSELoss()
         loss = crit(pred, label)
 
         
