@@ -1,24 +1,26 @@
-# JSNS2 Vertex Reconstruction with GNN 
+# JSNS2 Vertex Reconstruction with Dynamic Graph Convolution Neural Network (DGCNN)
 # Run
-## waveform input
-### Run script example
-    python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --itype # --ftype #
-    python eval_script.py --config config.yaml -o test --device # --seed # --batch # --geo # --itype #  --ftype #
-### condition
+
+## Run option
+    
     --config : config file (ex. config.yaml)
-    -o : output folder name (ex. test)
+    --output / -o : output folder name (ex. test)
     --device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
     --epoch : train epoch num
     --batch : train batch size
     --lr : learning rate
     --seed : data split random number
-    --model : train model
     --fea : input data feature num (ex. waveform : 248 / charge : 1)
     --cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
-    --geo : detector geometry (0: jsns2 120 / 1 : jsns2 96 / 2 : sphere mc / 3 : cylinder mc)
-    --itype : input type (input data type 0=charge, 1=wf high, 2 = wf low, 3 = wf sum)
-    --ftype : file type 0 = csv / 1 = h5
+    --geo : detector geometry (for load PMTs position infor)| 1 = jsns2 96PMTs / 2 = jsns2 120PMTs
+    --itype : input feature type 1,2,3(wave form high, low, sum) 0 = pmt charge
+    --tev : sample info saving 1 = training , 0 = evaluation
 
+    --model : train model
+
+### Run script example
+    python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --itype # --ftype #
+    python eval_script.py --config config.yaml -o test --device # --seed # --batch # --geo # --itype #  --ftype #
 
 ### python folder
 
