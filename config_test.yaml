@@ -3,19 +3,10 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_3MeV.h5
+    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_1MeV.h5
     xsec: 1
     ngen: 1
-  - name: jsns2_vertex
-    label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_4MeV.h5
-    xsec: 1
-    ngen: 1
-  - name: jsns2_vertex
-    label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_1207/positron_5MeV.h5
-    xsec: 1
-    ngen: 1
+
 training:
     randomSeed1: 12345
     nDataLoaders: 4

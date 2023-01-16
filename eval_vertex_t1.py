@@ -34,9 +34,8 @@ parser.add_argument('--device', action='store', type=int, default=0, help='devic
 parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
 parser.add_argument('--seed', action='store', type=int, default=12345, help='random seed')
 parser.add_argument('--geo', action='store', type=int, default=1, help='geometry')
-parser.add_argument('--dtype', action='store', type=int, default=1, help='dataset type')
 parser.add_argument('--itype', action='store', type=int, default=1, help='input data type 0=charge, 1=high, 2 = low, 3=sum')
-parser.add_argument('--ftype', action='store', type=int, default=1, help='file type 0 = csv / 1 = h5')
+parser.add_argument('--tev', action='store', type=int, default=1, help='sample info saving 1 = training , 0 = evaluation')
 
 
 args = parser.parse_args()
@@ -58,12 +57,12 @@ for sampleInfo in config['samples']:
     name = sampleInfo['name']
     dset.addSample(name, sampleInfo['path'], weight=1)
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize(args.geo, args.itype, args.ftype)
+dset.initialize(args.geo, args.itype, args.tev, args.output)
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
 lengths.append(len(dset)-sum(lengths))
 torch.manual_seed(config['training']['randomSeed1'])
 kwargs = {'num_workers':min(config['training']['nDataLoaders'], os.cpu_count()),
-          'batch_size':args.batch, 'pin_memory':False}
+        'batch_size':args.batch, 'pin_memory':False}
 
 if args.all:
     testLoader = DataLoader(dset, **kwargs)
@@ -96,7 +95,7 @@ dff = pd.read_csv(dd)
 
 ##### Start evaluation #####
 from tqdm import tqdm
-labels, preds = [], []
+label_s, preds = [], []
 weights = []
 scaledWeights = []
 procIdxs = []
@@ -106,39 +105,57 @@ features = []
 batch_size = []
 real_weights = []
 scales = []
-jade_vertexs = []
+jade_label = []
 eval_resampling = []
 eval_real = []
 model.eval()
 ens = []
 val_loss, val_acc = 0., 0.
-# for i, (data, label0, weight, rescale, procIdx, fileIdx, idx, dT, dVertex, vertexX, vertexY, vertexZ) in enumerate(tqdm(testLoader)):
+
 for i, data in enumerate(tqdm(testLoader)):
     
-    
-    
     data = data.to(device)
-    label = data.y.float().to(device=device) ### vertex
-      
-    label = label.reshape(-1,3)
+    labels = data.y.float().to(device=device)
+    j_energy = data.jae.float().to(device=device)
+    energy = data.tre.float().to(device=device)
+    
+    if args.cla == 3:
+        label = labels.reshape(-1,3)
+    elif args.cla == 4:
+        labels = labels.reshape(-1,3)
+        energys = energy.reshape(-1,1)
+        label = torch.cat([labels,energys],dim=1)
+
     pred = model(data)
 
-    jade_vertexs.extend([x.item() for x in data.jvtx.view(-1)])
-    labels.extend([x.item() for x in label.view(-1)])
+    if args.cla == 3:
+        label_s.extend([x.item() for x in label.view(-1)])
+        preds.extend([x.item() for x in pred.view(-1)])
+        jade_label.extend([x.item() for x in data.javtx.view(-1)])
+    elif args.cla == 4:
+        jade_comb = torch.cat([data.javtx,j_energy])
 
-    preds.extend([x.item() for x in pred.view(-1)])
-    batch_size.append(data.x.shape[0])
+        jade_label.extend([x.item() for x in jade_comb.view(-1)])
+
+
+        label_s.extend([x.item() for x in label.view(-1)])
+
+        preds.extend([x.item() for x in pred.view(-1)])
+
+
+
+    # batch_size.append(data.x.shape[0])
     
-    ens.extend([x.item() for x in data.energy.view(-1)])
+    # ens.extend([x.item() for x in data.energy.view(-1)])
 
-df = pd.DataFrame({'prediction':preds, 'label':labels,'jade':jade_vertexs})
+df = pd.DataFrame({'prediction':preds, 'label':label_s,'jade':jade_label})
 fPred = 'result/' + args.output + '/' + args.output + '.csv'
 df.to_csv(fPred, index=False)
 
 
-df2 = pd.DataFrame({'batch':batch_size,'energy':ens})
-fPred2 = 'result/' + args.output + '/' + args.output + '_batch.csv'
-df2.to_csv(fPred2, index=False)
+# df2 = pd.DataFrame({'batch':batch_size})
+# fPred2 = 'result/' + args.output + '/' + args.output + '_batch.csv'
+# df2.to_csv(fPred2, index=False)
 
     
     
@@ -152,24 +169,3 @@ df2.to_csv(fPred2, index=False)
     
     
     
-    
-    
-    
-    
-    
-# if args.cla ==3:
-#     df = pd.DataFrame({'label':labels, 'weight':weights, 'scaledWeight':scaledWeights})
-#     fPred = 'result/' + args.output + '/' + args.output + '.csv'
-#     df.to_csv(fPred, index=False)
-
-#     df2 = pd.DataFrame({'prediction':preds})
-#     predonlyFile = 'result/' + args.output + '/' + args.output + '_pred.csv'
-#     df2.to_csv(predonlyFile, index=False)
-# else:
-#     df = pd.DataFrame({'label':labels, 'prediction':preds,
-#                      'weight':weights, 'scaledWeight':scaledWeights})
-#     fPred = 'result/' + args.output + '/' + args.output + '.csv'
-#     df.to_csv(fPred, index=False)
-
-
-

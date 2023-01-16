@@ -11,6 +11,11 @@
 # python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20221211_homo4 --device 0 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1
 
 
-python train_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml -o 20230110_type1_woE --device 0 --epoch 3000 --batch 256 --lr 1e-4 --seed 12345 --model DGCNN_type1 --fea 1 --cla 3 --geo 1 --itype 0 --ftype 1
+python train_vertex_t1.py --config config_test.yaml -o 20230112_test --device 0 --epoch 1 --batch 256 --lr 1e-4 --seed 12345 --model DGCNN_type1 --fea 2 --cla 3 --geo 1 --itype 0 --tev 1 --edge 15 --aggr mean --depths 5 --pools 0
 
-python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20230110_type1_woE --device 0 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1 --cla 3
+# python train_vertex_t1.py --config config_jsns2_positron_1to10_0113data.yaml -o 20230112_test --device 0 --epoch 1 --batch 256 --lr 1e-4 --seed 12345 --model DGCNN_type1 --fea 2 --cla 4 --geo 1 --itype 0 --tev 1 --edge 15 --aggr mean --depths 5 --pools 0
+
+python eval_vertex_t1.py --config config_test.yaml -o 20230112_test --device 0 --seed 12345 --batch 1 --geo 1 --itype 0  --cla 3 --tev 0
+
+# python eval_vertex_t1.py --config config_jsns2_positron_1to10_1207data.yaml  -o 20230110_type1_woE --device 0 --seed 12345 --batch 1 --geo 1 --itype 0  --ftype 1 --cla 3
+

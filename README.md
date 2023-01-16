@@ -15,6 +15,11 @@
     --geo : detector geometry (for load PMTs position infor)| 1 = jsns2 96PMTs / 2 = jsns2 120PMTs
     --itype : input feature type 1,2,3(wave form high, low, sum) 0 = pmt charge
     --tev : sample info saving 1 = training , 0 = evaluation
+    --edge : dgcnn layer Number of nearest neighbors
+    --aggr : The aggregation operator The aggregation operator "add","mean","max"
+    --depths : dgcnn Number of layers
+    --pools : global pool max 0 / mean 1
+
 
     --model : train model
 
