@@ -141,8 +141,8 @@ for epoch in range(nEpoch):
         pred = model(data)
 
         # crit = torch.nn.MSELoss(reduction='sum') ### sacledweight np.abs()
-        crit = torch.nn.L1Loss()
-        # crit = torch.nn.MSELoss()
+        # crit = torch.nn.L1Loss()
+        crit = torch.nn.MSELoss()
 
         loss = crit(pred, label)
         loss.backward()
@@ -180,8 +180,8 @@ for epoch in range(nEpoch):
         pred = model(data)
 
         # crit = torch.nn.MSELoss(reduction='sum') ### sacledweight np.abs()
-        crit = torch.nn.L1Loss()
-        # crit = torch.nn.MSELoss()
+        # crit = torch.nn.L1Loss()
+        crit = torch.nn.MSELoss()
         loss = crit(pred, label)
 
         

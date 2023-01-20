@@ -119,27 +119,27 @@ for i, data in enumerate(tqdm(testLoader)):
     j_energy = data.jae.float().to(device=device)
     energy = data.tre.float().to(device=device)
     
-    if args.cla == 3:
-        label = labels.reshape(-1,3)
-    elif args.cla == 4:
-        labels = labels.reshape(-1,3)
-        energys = energy.reshape(-1,1)
-        label = torch.cat([labels,energys],dim=1)
+    
+    labels = labels.reshape(-1,3)
+    energys = energy.reshape(-1,1)
 
+    
     pred = model(data)
 
+    label = torch.cat([labels, energys],dim=1)
+    jade_comb = torch.cat([data.javtx,j_energy])
+    
+    
+    jade_label.extend([x.item() for x in jade_comb.view(-1)])
+    label_s.extend([x.item() for x in label.view(-1)])
+    
     if args.cla == 3:
-        label_s.extend([x.item() for x in label.view(-1)])
-        preds.extend([x.item() for x in pred.view(-1)])
-        jade_label.extend([x.item() for x in data.javtx.view(-1)])
+        pred_p = torch.cat([pred,energys],dim=1)
+        
+        preds.extend([x.item() for x in pred_p.view(-1)])
+    
     elif args.cla == 4:
-        jade_comb = torch.cat([data.javtx,j_energy])
-
-        jade_label.extend([x.item() for x in jade_comb.view(-1)])
-
-
-        label_s.extend([x.item() for x in label.view(-1)])
-
+        
         preds.extend([x.item() for x in pred.view(-1)])
 
 
