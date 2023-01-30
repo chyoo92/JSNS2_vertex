@@ -1,6 +1,18 @@
 # JSNS2 Vertex Reconstruction with Dynamic Graph Convolution Neural Network (DGCNN)
-# Run
+## Conda instll
+Install pytorch-geomtric (pyg)
+Additional libs may be required...
 
+
+    conda create -n conda_name python=3.9
+
+    conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=10.2 -c pytorch
+
+    conda install pyg -c pyg
+
+    conda install -c anaconda h5py
+
+    conda install -c conda-forge matplotlib
 ## Run option
     
     --config : config file (ex. config.yaml)
@@ -24,8 +36,10 @@
     --model : train model
 
 ### Run script example
-    python train_script.py --config config.yaml -o test --device # --epoch # --batch # --lr # --seed # --model model --fea # --cla # --geo # --itype # --ftype #
-    python eval_script.py --config config.yaml -o test --device # --seed # --batch # --geo # --itype #  --ftype #
+    python train_model.py --config config_name.yaml -o output --device # --epoch # --batch # --lr # --seed # --model model_name --geo # --itype # --tev 1 --fea # --pools # --aggr operator --cla # --edge # --depths # 
+
+    python eval_model.py --config config_name.yaml -o output --device # --seed # --batch # --geo # --itype # --tev 0 --cla #
+
 
 ### python folder
 
@@ -48,92 +62,19 @@
 
 
 
-acc_loss-Copy1.ipynb
-acc_loss.ipynb
-Cf_new_vertex.ipynb
-ch_1563_make.ipynb
-charge_csv.ipynb
-charge_h5.ipynb
-checking_filelist.ipynb
-find_Cf.ipynb
-make_vertex_cf_data.ipynb
-make_vertex_cf_data2.ipynb
-make_vertex_proto.ipynb
-make_vertex_proto2.ipynb
-plot-Copy1.ipynb
-plot.ipynb
-plot_jade.ipynb
-plot_jade_energy-Copy1.ipynb
-plot_jade_energy.ipynb
-Untitled.ipynb
 
-
-
-ch_1563_make.py
-
-
-ch_make_loop.sh
-ch_make_loop2.sh
-
-
-
-config_cf.yaml
-config_jsns2_positron_10.yaml
-config_jsns2_positron_1t20.yaml
-config_jsns2_positron_all.yaml
-config_test.yaml
-
-
-
-
-eval_vertex_cf_ch.py
-eval_vertex_cf_wf.py
-eval_vertex_mc.py
-eval_vertex_mc2.py
-eval_vertex_mc3.py
-eval_vertex_mc4.py
-eval_vertex_t1.py
-eval_vertex_t2.py
-eval_vertex_t3.py
-
-
-
-make_vertex.py
-make_vertex_cf_data.py
-
-
-
-
-
-
-README.md
-
-
-train_vertex_t1.py
-
-train_wf.sh
-vertex_finder.tar
 
 
 ### config file
-
-- config_test.yaml : data path / split fraction / etc....
-
+data path / split fraction / etc....
+- config_test.yaml : for train/eval code running test
+- config_cf.yaml : Cf data evaluation
+- config_jsns2_positron_1to10_0113data.yaml : MC 1MeV~10MeV data
 
 ### Make file
 
 - make_vertex.py : make vertex data from raw and cm file. for only JSNS2
 
-### Training & Validation & Evaluation
-
-
-- train_vertex_t1.py : train highwf
-- train_vertex_t2.py : train lowwf
-- train_vertex_t3.py : train sumwf
-
-- eval_vertex_t1.py : eval highwf
-- eval_vertex_t2.py : eval lowwf
-- eval_vertex_t3.py : eval sumwf
 
 
 ### ipynb script

@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score
 import torch.optim as optim
 import argparse
 import pandas as pd
-
+from loss_functions import *
 sys.path.append("./python")
 from model.allModel import *
 
@@ -33,11 +33,14 @@ parser.add_argument('--seed', action='store', type=int, default=12345,help='rand
 parser.add_argument('--fea', action='store', type=int, default=248, help='# fea')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
 parser.add_argument('--geo', action='store', type=int, default=1, help='geometry')
-parser.add_argument('--itype', action='store', type=int, default=1, help='input data type 0 = charge, 1 = wfhigh, 2 = wflow, 3 = wf sum')
-parser.add_argument('--ftype', action='store', type=int, default=1, help='file type 0 = csv / 1 = h5')
+parser.add_argument('--itype', action='store', type=int, default=0, help='input data type 0 = charge, 1 = wfhigh, 2 = wflow, 3 = wf sum')
+parser.add_argument('--tev', action='store', type=int, default=1, help='sample info saving 1 = training , 0 = evaluation')
+parser.add_argument('--edge', action='store', type=int, default=5, help='dgcnn Number of nearest neighbors')
+parser.add_argument('--aggr', action='store', type=str, default='add', help='The aggregation operator "add","mean","max"')
+parser.add_argument('--depths', action='store', type=int, default=3, help='dgcnn Number of layers')
+parser.add_argument('--pools', action='store', type=int, default=0, help='global max 0 / mean 1')
 
-
-models = ['GNN1layer', 'GNN2layer','GNN3layer', 'GNN4layer','GNN10layer','GNN11layer','GNN12layer','GNN13layer','GNN22layer','GNN33layer','GNN44layer','GNN55layer','GNN1010layer','GNN5layer','DGCNN','DGCNN2','DGCNN3','DGCNN4','DGCNN5','DGCNN6','DGCNN7','DGCNN8','DGCNN9','DGCNN10','DGCNN11','DGCNN12','DGCNN6_2','DGCNN6_3','DGCNN6_4','DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN6_homo4_1','GNN963layer']
+models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
 
@@ -55,8 +58,7 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 
-import time
-start = time.time()
+
 ##### Define dataset instance #####
 from dataset.vertexdataset import *
 dset = vertexdataset()
@@ -67,7 +69,7 @@ for sampleInfo in config['samples']:
     name = sampleInfo['name']
     dset.addSample(name, sampleInfo['path'], weight=1)
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize(args.geo, args.itype, args.ftype)
+dset.initialize(args.geo, args.itype, args.tev, args.output)
 
 
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
@@ -84,8 +86,10 @@ torch.manual_seed(torch.initial_seed())
 
 
 ##### Define model instance #####
-exec('model = '+args.model+'(fea=args.fea, cla=args.cla)')
+exec('model = '+args.model+'(fea=args.fea, cla=args.cla, edge = args.edge,aggr = args.aggr,depths = args.depths,pool=args.pools)')
 torch.save(model, os.path.join('result/' + args.output, 'model.pth'))
+
+
 
 device = 'cpu'
 if args.device >= 0 and torch.cuda.is_available():
@@ -95,6 +99,7 @@ if args.device >= 0 and torch.cuda.is_available():
 ##### Define optimizer instance #####
 optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
 
+# optm = optim.AdamW(model.parameters(), lr=config['training']['learningRate'])
 
 
 ##### Start training #####
@@ -103,7 +108,12 @@ with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write('\n\n')
     fout.write(str(model))
     fout.close()
+
+def logcosh(prediction, target):
     
+    diff = prediction - target
+    elements = diff + softplus(-2.0 * diff) - np.log(2.0)
+    return elements    
     
     
 from sklearn.metrics import accuracy_score
@@ -120,23 +130,37 @@ for epoch in range(nEpoch):
     
     for i, data in enumerate(tqdm(trnLoader, desc='epoch %d/%d' % (epoch+1, nEpoch))):
         data = data.to(device)
-
+        labels = data.y.float().to(device=device) ### vertex
+        j_energy = data.jae.float().to(device=device)
+        energy = data.tre.float().to(device=device)    
         
-        
-        label = data.y.float().to(device=device) ### vertex
+        if args.cla == 3:
+            label = labels.reshape(-1,3)
 
-        label = label.reshape(-1,3)
+        elif args.cla == 4:
+            labels = labels.reshape(-1,3)
+            energys = energy.reshape(-1,1)
+            label = torch.cat([labels,energys],dim=1)
+
+
         pred = model(data)
 
-        crit = torch.nn.MSELoss(reduction='sum')
+        # crit = torch.nn.L1Loss()
+        crit = torch.nn.MSELoss()
+        # crit = torch.nn.MSELoss(reduction='sum')
+        # crit = EuclideanDistanceLoss()
+        # loss = logcosh(pred, labe÷l)
         
-        loss1 = crit(pred[:,:2],label[:,:2])
-        
+        # crit1 = LogCoshLoss()
+        # loss1 = crit1(pred,label)
 
-        crit2 = torch.nn.MSELoss()
-        loss2 = torch.sqrt(crit2(pred, label))
-        loss = loss1+loss2
-        
+        # crit = LogCoshLoss_sum()
+        # loss = crit(pred,label)
+
+        # crit = torch.nn.MSELoss(reduction='sum')
+        # loss = torch.sqrt(crit(pred, label))
+
+        loss = crit(pred, label)
         loss.backward()
 
         optm.step()
@@ -148,7 +172,7 @@ for epoch in range(nEpoch):
         trn_loss += loss.item()*ibatch
 
         
-        
+
     trn_loss /= nProcessed 
 
     print(trn_loss,'trn_loss')
@@ -157,21 +181,39 @@ for epoch in range(nEpoch):
     val_loss, val_acc = 0., 0.
     nProcessed = 0
     for i, data in enumerate(tqdm(valLoader)):
-        
         data = data.to(device)
+        labels = data.y.float().to(device=device)
+        j_energy = data.jae.float().to(device=device)
+        energy = data.tre.float().to(device=device)
 
-        label = data.y.float().to(device=device)
-        label = label.reshape(-1,3)
+        if args.cla == 3:
+            label = labels.reshape(-1,3)
+        elif args.cla == 4:
+            labels = labels.reshape(-1,3)
+            energys = energy.reshape(-1,1)
+            label = torch.cat([labels,energys],dim=1)
+
         pred = model(data)
 
-        crit = torch.nn.MSELoss(reduction='sum')
+        # crit = torch.nn.L1Loss()
+        crit = torch.nn.MSELoss()
+        # crit = torch.nn.MSELoss(reduction='sum')
+        # crit = EuclideanDistanceLoss()
+        # loss = logcosh(pred, labe÷l)
         
-        loss1 = crit(pred[:,:2],label[:,:2])
-        
+        # crit1 = LogCoshLoss()
+        # loss1 = crit1(pred,label)
 
-        crit2 = torch.nn.MSELoss()
-        loss2 = torch.sqrt(crit2(pred, label))
-        loss = loss1+loss2
+        # crit = LogCoshLoss_sum()
+        # loss = crit(pred,label)
+
+        # crit = torch.nn.MSELoss(reduction='sum')
+        # loss = torch.sqrt(crit(pred, label))
+
+
+        loss = crit(pred, label)
+
+        
         ibatch = len(label)
         nProcessed += ibatch
         val_loss += loss.item()*ibatch
@@ -199,10 +241,3 @@ for epoch in range(nEpoch):
 
 bestState = model.to('cpu').state_dict()
 torch.save(bestState, os.path.join('result/' + args.output, 'weightFinal.pth'))
-
-
-
-
-
-
-
