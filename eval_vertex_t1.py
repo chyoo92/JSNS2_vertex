@@ -144,28 +144,6 @@ for i, data in enumerate(tqdm(testLoader)):
 
 
 
-    # batch_size.append(data.x.shape[0])
-    
-    # ens.extend([x.item() for x in data.energy.view(-1)])
-
 df = pd.DataFrame({'prediction':preds, 'label':label_s,'jade':jade_label})
 fPred = 'result/' + args.output + '/' + args.output + '.csv'
 df.to_csv(fPred, index=False)
-
-
-# df2 = pd.DataFrame({'batch':batch_size})
-# fPred2 = 'result/' + args.output + '/' + args.output + '_batch.csv'
-# df2.to_csv(fPred2, index=False)
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
