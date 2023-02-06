@@ -47,17 +47,7 @@ Additional libs may be required...
 
 - python/dataset/vertexdataset.py : dataset processing script
 
-- python/detector_geometry/jsns_geometry_pos.csv : jsns 96 PMTs geo
-- python/detector_geometry/jsns_geometry_pos2.csv : jsns 120 PMTs geo
-- python/detector_geometry/cylinder_geometry_pos.csv : RAT example cylinder geo
-- python/detector_geometry/sphere_geometry_pos.csv : RAT sphere cylinder geo
-
-- python/old_config_file/*.yaml : old config file, now not use, just save
-
-- python/old_mc_data/*.csv & *.h5 : old mc data, not use
-
-
-
+- python/detector_geometry/ *.csv : make it according to your detector and us it. (load from vertexdataset.py)
 
 
 
@@ -85,3 +75,22 @@ data path / split fraction / etc....
 - plot.ipynb : vertex result confirm
 - train_vertex_t1.ipynb : train code test script
 - Untitiled.ipynb : testing script....
+
+
+
+
+<details><summary>흐음</summary>
+<p>
+
+- python/detector_geometry/jsns_geometry_pos.csv : jsns 96 PMTs geo
+- python/detector_geometry/jsns_geometry_pos2.csv : jsns 120 PMTs geo
+- python/detector_geometry/cylinder_geometry_pos.csv : RAT example cylinder geo
+- python/detector_geometry/sphere_geometry_pos.csv : RAT sphere cylinder geo
+
+- python/old_config_file/*.yaml : old config file, now not use, just save
+
+- python/old_mc_data/*.csv & *.h5 : old mc data, not use
+
+
+</p>
+</deteils>
