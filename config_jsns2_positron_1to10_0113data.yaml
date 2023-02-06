@@ -3,52 +3,52 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_1MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_1MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_2MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_2MeV.h5
     xsec: 1
     ngen: 1  
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_3MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_3MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_4MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_4MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_5MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_5MeV.h5
     xsec: 1
     ngen: 1  
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_6MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_6MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_7MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_7MeV.h5
     xsec: 1
     ngen: 1  
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_8MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_8MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_9MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_9MeV.h5
     xsec: 1
     ngen: 1
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_10MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_10MeV.h5
     xsec: 1
     ngen: 1  
 

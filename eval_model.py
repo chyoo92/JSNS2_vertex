@@ -141,6 +141,10 @@ for i, data in enumerate(tqdm(testLoader)):
     elif args.cla == 4:
         
         preds.extend([x.item() for x in pred.view(-1)])
+    elif args.cla == 1:
+        pred_p = torch.cat([labels,pred],dim=1)
+        
+        preds.extend([x.item() for x in pred_p.view(-1)])
 
 
 

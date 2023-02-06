@@ -141,6 +141,8 @@ for epoch in range(nEpoch):
             labels = labels.reshape(-1,3)
             energys = energy.reshape(-1,1)
             label = torch.cat([labels,energys],dim=1)
+        elif args.cla ==1 :
+            label = energy.reshape(-1,1)
 
 
         pred = model(data)
@@ -192,6 +194,8 @@ for epoch in range(nEpoch):
             labels = labels.reshape(-1,3)
             energys = energy.reshape(-1,1)
             label = torch.cat([labels,energys],dim=1)
+        elif args.cla ==1 :
+            label = energy.reshape(-1,1)
 
         pred = model(data)
 
