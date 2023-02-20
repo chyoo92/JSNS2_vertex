@@ -37,10 +37,11 @@ parser.add_argument('--itype', action='store', type=int, default=0, help='input 
 parser.add_argument('--tev', action='store', type=int, default=1, help='sample info saving 1 = training , 0 = evaluation')
 parser.add_argument('--edge', action='store', type=int, default=5, help='dgcnn Number of nearest neighbors')
 parser.add_argument('--aggr', action='store', type=str, default='add', help='The aggregation operator "add","mean","max"')
+parser.add_argument('--loss', action='store', type=str, default='mse', help='mse, mae, logcosh, maxcut')
 parser.add_argument('--depths', action='store', type=int, default=3, help='dgcnn Number of layers')
 parser.add_argument('--pools', action='store', type=int, default=0, help='global max 0 / mean 1')
 
-models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1']
+models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1','DGCNN_type2']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
 
@@ -109,11 +110,7 @@ with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write(str(model))
     fout.close()
 
-def logcosh(prediction, target):
-    
-    diff = prediction - target
-    elements = diff + softplus(-2.0 * diff) - np.log(2.0)
-    return elements    
+
     
     
 from sklearn.metrics import accuracy_score
@@ -147,20 +144,20 @@ for epoch in range(nEpoch):
 
         pred = model(data)
 
-        # crit = torch.nn.L1Loss()
-        crit = torch.nn.MSELoss()
-        # crit = torch.nn.MSELoss(reduction='sum')
-        # crit = EuclideanDistanceLoss()
-        # loss = logcosh(pred, labe÷l)
         
-        # crit1 = LogCoshLoss()
-        # loss1 = crit1(pred,label)
+        if args.loss == 'mse':
+            crit = torch.nn.MSELoss()
+        elif args.loss == 'mae':
+            crit = torch.nn.L1Loss()
+        elif args.loss == 'logcosh':
+            crit = LogCoshLoss()
+        elif args.loss == 'maxabs3':
+            crit = MaxABSLoss3()
+        elif args.loss == 'maxabs4':
+            crit = MaxABSLoss4()
 
-        # crit = LogCoshLoss_sum()
-        # loss = crit(pred,label)
+        
 
-        # crit = torch.nn.MSELoss(reduction='sum')
-        # loss = torch.sqrt(crit(pred, label))
 
         loss = crit(pred, label)
         loss.backward()
@@ -199,20 +196,14 @@ for epoch in range(nEpoch):
 
         pred = model(data)
 
-        # crit = torch.nn.L1Loss()
-        crit = torch.nn.MSELoss()
-        # crit = torch.nn.MSELoss(reduction='sum')
-        # crit = EuclideanDistanceLoss()
-        # loss = logcosh(pred, labe÷l)
-        
-        # crit1 = LogCoshLoss()
-        # loss1 = crit1(pred,label)
-
-        # crit = LogCoshLoss_sum()
-        # loss = crit(pred,label)
-
-        # crit = torch.nn.MSELoss(reduction='sum')
-        # loss = torch.sqrt(crit(pred, label))
+        if args.loss == 'mse':
+            crit = torch.nn.MSELoss()
+        elif args.loss == 'mae':
+            crit = torch.nn.L1Loss()
+        elif args.loss == 'logcosh':
+            crit = LogCoshLoss()
+        elif args.loss == 'maxabs':
+            crit = MaxABSLoss()
 
 
         loss = crit(pred, label)

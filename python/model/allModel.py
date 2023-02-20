@@ -39,4 +39,5 @@ from model.DGCNN6_homo4 import *
 from model.DGCNN6_homo4_1 import *
 
 from model.DGCNN_type1 import *
+from model.DGCNN_type2 import *
 

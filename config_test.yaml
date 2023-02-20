@@ -3,7 +3,7 @@ samples:
 
   - name: jsns2_vertex
     label: 1
-    path: /users/yewzzang/work/make_mc_vertex/analysis/mc_data_0113/combined_1MeV.h5
+    path: /users/yewzzang/work/JSNS2_data_processing/analysis/mc_data_0113/combined_1MeV.h5
     xsec: 1
     ngen: 1
 

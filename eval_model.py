@@ -78,8 +78,8 @@ from model.allModel import *
 
 model = torch.load('result/' + args.output+'/model.pth', map_location='cpu')
 model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location='cpu'))
-if args.cla == 1:
-    model.fc.add_module('output', torch.nn.Sigmoid())
+# if args.cla == 1:
+    # model.fc.add_module('output', torch.nn.Sigmoid())
 
 
 device = 'cpu'
