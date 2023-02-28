@@ -41,7 +41,7 @@ parser.add_argument('--loss', action='store', type=str, default='mse', help='mse
 parser.add_argument('--depths', action='store', type=int, default=3, help='dgcnn Number of layers')
 parser.add_argument('--pools', action='store', type=int, default=0, help='global max 0 / mean 1')
 
-models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1','DGCNN_type2']
+models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1','DGCNN_type2','DGCNN_type3','DGCNN_type4','DGCNN_type5']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
 
