@@ -10,7 +10,7 @@ from model.PointConv import PointConvNet2
 from model.PoolingNet import PoolingNet
 from torch_scatter import scatter_mean
 from torch_geometric.nn import GCNConv,knn_graph
-from torch_geometric.nn import MLP, DynamicEdgeConv, global_max_pool, global_mean_pool
+from torch_geometric.nn import DynamicEdgeConv, global_max_pool, global_mean_pool
 from torch_geometric.utils.homophily import homophily
 
 

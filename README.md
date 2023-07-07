@@ -1,18 +1,44 @@
-# JSNS2 Vertex Reconstruction with Dynamic Graph Convolution Neural Network (DGCNN)
-## Conda instll
-Install pytorch-geomtric (pyg)
-Additional libs may be required...
+# JSNS2 Vertex Reconstruction Deep Learning
+
+## Install Conda
+~~~
+## conda version 22.9.0
+## python 3.9
+## pytorch 1.13.0 version
+## CUDA 11.7
+## install pyg 2.3.1
+
+## Main library
+conda create -n env_name python=3.9
+pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 torchaudio==0.13.0 --extra-index-url https://download.pytorch.org/whl/cu117
+pip install torch_geometric
+pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-1.13.0+cu117.html
+
+## Other library
+
+pip install h5py
+
+pip install matplotlib
+
+pip install jupyter
+
+pip install ipykernel  ## install ipykernel (for vscode)
+
+pip install pandas==1.5.3  ## pandas >= 2.0.0 version can't use 'append' so use pandasn <=2.0.0 version
+
+pip install uproot
+
+conda install -c conda-forge root  ## 
 
 
-    conda create -n conda_name python=3.9
+############################################################################################### 
+Most installations are done using pip rather than conda.
+Due to the conda version issue, installation does not work properly when done with conda.
+Only the root user installed using conda.
+If the conda version is up to date, there should be no issues with installing using conda.
+###############################################################################################
+~~~
 
-    conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=10.2 -c pytorch
-
-    conda install pyg -c pyg
-
-    conda install -c anaconda h5py
-
-    conda install -c conda-forge matplotlib
 ## Run option
     
     --config : config file (ex. config.yaml)

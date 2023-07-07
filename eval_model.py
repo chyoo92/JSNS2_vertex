@@ -76,16 +76,17 @@ torch.manual_seed(torch.initial_seed())
 ##### Define model instance #####
 from model.allModel import *
 
-model = torch.load('result/' + args.output+'/model.pth', map_location='cpu')
-model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location='cpu'))
-# if args.cla == 1:
-    # model.fc.add_module('output', torch.nn.Sigmoid())
 
 
 device = 'cpu'
+model = torch.load('result/' + args.output+'/model.pth', map_location='cpu')
+model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location='cpu'))
+
 if args.device >= 0 and torch.cuda.is_available():
     model = model.cuda()
     device = 'cuda'
+    model = torch.load('result/' + args.output+'/model.pth', map_location=device)
+    model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location=device))
 
 dd = 'result/' + args.output + '/train.csv'
 

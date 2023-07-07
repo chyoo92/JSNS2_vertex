@@ -35,12 +35,17 @@ class vertexdataset(PyGDataset):
         true_energys = torch.Tensor(self.true_energyList[fileIdx][idx])
         jade_vertexs = torch.Tensor(self.jade_vtxList[fileIdx][idx])
         jade_energys = torch.Tensor(self.jade_energyList[fileIdx][idx])
+#         jade_hwf = torch.Tensor(self.high_wfList[fileIdx][idx])
+#         jade_lwf = torch.Tensor(self.low_wfList[fileIdx][idx])
+        
                 
         data = PyGData(x = features, pos = pmts_pos, y = true_vertexs)
         data.javtx = jade_vertexs
         data.jae = jade_energys
         data.tre = true_energys
         data.tq = total_charges
+#         data.hwf = jade_hwf
+#         data.lwf = jade_lwf
 
         return data
     def addSample(self, procName, fNamePattern, weight=1, logger=None):
@@ -58,7 +63,8 @@ class vertexdataset(PyGDataset):
                 'fileName':fName, 'fileIdx':fileIdx, 'sumweight':0,
             }
             self.sampleInfo = self.sampleInfo.append(info, ignore_index=True)
-
+            
+            
     def setProcessLabel(self, procName, label):
         self.sampleInfo.loc[self.sampleInfo.procName==procName, 'label'] = label
     def initialize(self, geo, itype, tev, output):
@@ -75,6 +81,8 @@ class vertexdataset(PyGDataset):
         self.true_energyList = []
         self.jade_vtxList = []
         self.jade_energyList = []
+        self.high_wfList = []
+        self.low_wfList = []
                 
         #### file num check
         nFiles = len(self.sampleInfo)
@@ -102,7 +110,8 @@ class vertexdataset(PyGDataset):
             true_energy = []
             jade_vtx = []
             jade_energy = []
-            
+#             high_wf = []
+#             low_wf = []
             #### each file event append list
             for j in range(nEvent):
                 
@@ -140,6 +149,9 @@ class vertexdataset(PyGDataset):
                     true_energy.append(f['E'][j])
                     jade_vtx.append(f['jade_vertex'][j])
                     jade_energy.append(f['jade_E'][j])
+#                     high_wf.append(f['high_wf'][j])
+#                     low_wf.append(f['low_wf'][j])
+                                    
 
             #### all event append list
             self.pmts_posList.append(pmts_pos)
@@ -149,6 +161,8 @@ class vertexdataset(PyGDataset):
             self.true_energyList.append(true_energy)
             self.jade_vtxList.append(jade_vtx)
             self.jade_energyList.append(jade_energy)
+#             self.high_wfList.append(high_wf)
+#             self.low_wfList.append(low_wf)
             
         #### save sampleInfo file in train result path
         SI = self.sampleInfo

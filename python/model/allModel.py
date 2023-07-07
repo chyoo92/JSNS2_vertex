@@ -43,3 +43,46 @@ from model.DGCNN_type2 import *
 from model.DGCNN_type3 import *
 from model.DGCNN_type4 import *
 from model.DGCNN_type5 import *
+from model.DGCNN_type6 import *
+from model.DGCNN_type7 import *
+from model.DGCNN_type8 import *
+from model.DGCNN_type9 import *
+from model.DGCNN_type10 import *
+from model.DGCNN_type11 import *
+from model.DGCNN_type12 import *
+
+from model.DGCNN_type_x import *
+from model.DGCNN_type_x2 import *
+from model.DGCNN_type_y import *
+from model.DGCNN_type_z import *
+
+from model.DGCNN_type_xy import *
+
+from model.EDCN_type1 import *
+from model.EDCN_type1_x import *
+from model.EDCN_type2 import *
+from model.EDCN_type2_x import *
+from model.EDCN_type3 import *
+from model.EDCN_type4 import *
+from model.EDCN_type5 import *
+from model.EDCN_type6 import *
+from model.EDCN_type7 import *
+from model.EDCN_type8 import *
+from model.EDCN_type9 import *
+from model.EDCN_type10 import *
+from model.EDCN_type11 import *
+from model.EDCN_type12 import *
+
+
+from model.EDCN_type_wf1 import *
+from model.EDCN_type_wf2 import *
+from model.EDCN_type_wf3 import *
+
+from model.DGCNN_type_wf1 import *
+from model.DGCNN_type_wf2 import *
+from model.image_graph import *
+
+
+from model.SGCNN_type1 import *
+
+from model.SAVER import *

@@ -456,11 +456,10 @@ class EuclideanDistanceLoss(LossFunction):
             (prediction[:, 0] - target[:, 0]) ** 2
             + (prediction[:, 1] - target[:, 1]) ** 2
             + (prediction[:, 2] - target[:, 2]) ** 2
-            + (prediction[:, 3] - target[:, 3]) ** 2
         )
 
 
-class MaxABSLoss4(LossFunction):
+class Msedistance(LossFunction):
     """Mean squared error in three dimensions."""
 
     def _forward(self, prediction: Tensor, target: Tensor) -> Tensor:
@@ -472,31 +471,7 @@ class MaxABSLoss4(LossFunction):
             Elementwise von Mises-Fisher loss terms. Shape [N,]
         """
 
-        return torch.abs(
-            (prediction[:, 0] - target[:, 0])/2.0
-            + (prediction[:, 1] - target[:, 1])/2.0
-            + (prediction[:, 2] - target[:, 2])/1.5
-            + (prediction[:, 3] - target[:, 3])
-        )
-
-class MaxABSLoss3(LossFunction):
-    """Mean squared error in three dimensions."""
-
-    def _forward(self, prediction: Tensor, target: Tensor) -> Tensor:
-        """Calculate 3D Euclidean distance between predicted and target.
-        Args:
-            prediction: Output of the model. Must have shape [N, 3]
-            target: Target tensor, extracted from graph object.
-        Returns:
-            Elementwise von Mises-Fisher loss terms. Shape [N,]
-        """
-
-        return torch.abs(
-            (prediction[:, 0] - target[:, 0])/2.0
-            + (prediction[:, 1] - target[:, 1])/2.0
-            + (prediction[:, 2] - target[:, 2])/1.5
-            
-        )
+        return torch.sqrt(prediction[:,0]**2+prediction[:,1]**2+prediction[:,2]**2)- torch.sqrt(target[:, 0]**2- target[:, 1]**2- target[:, 2]**2)
 
 
 

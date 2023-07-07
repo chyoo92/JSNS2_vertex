@@ -41,9 +41,9 @@ parser.add_argument('--loss', action='store', type=str, default='mse', help='mse
 parser.add_argument('--depths', action='store', type=int, default=3, help='dgcnn Number of layers')
 parser.add_argument('--pools', action='store', type=int, default=0, help='global max 0 / mean 1')
 
-models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1','DGCNN_type2','DGCNN_type3','DGCNN_type4','DGCNN_type5']
+models = ['DGCNN6_homo','DGCNN6_homo2','DGCNN6_homo3','DGCNN6_homo4','DGCNN_type1','DGCNN_type2','DGCNN_type3','DGCNN_type4','DGCNN_type5','DGCNN_type6','DGCNN_type7','DGCNN_type8','DGCNN_type9','DGCNN_type10','DGCNN_type11','DGCNN_type12','EDCN_type1','EDCN_type2','EDCN_type3','EDCN_type4','EDCN_type5','EDCN_type6','EDCN_type7','EDCN_type8','EDCN_type9','EDCN_type10','EDCN_type11','EDCN_type12','SGCNN_type1']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
-
+                                                                                                                                                                                                                                                                                                                                                                                                                         
 
 args = parser.parse_args()
 config = yaml.load(open(args.config).read(), Loader=yaml.FullLoader)
@@ -98,7 +98,8 @@ if args.device >= 0 and torch.cuda.is_available():
     device = 'cuda'
 
 ##### Define optimizer instance #####
-optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
+# optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
+
 
 # optm = optim.AdamW(model.parameters(), lr=config['training']['learningRate'])
 
@@ -110,8 +111,29 @@ with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write(str(model))
     fout.close()
 
-
     
+w0 = torch.tensor(0.5, requires_grad=True)
+w1 = torch.tensor(0.3, requires_grad=True)
+w2 = torch.tensor(0.2, requires_grad=True)
+# torch.autograd.set_detect_anomaly(True)    
+# def normalize_weights(w0, w1, w2):
+#     # 가중치 정규화
+#     total_weight = w0 + w1 + w2
+#     w0_normalized = w0 / total_weight
+#     w1_normalized = w1 / total_weight
+#     w2_normalized = w2 / total_weight
+#     return w0_normalized, w1_normalized, w2_normalized
+
+def weighted_loss(loss0, loss1, loss2, w0, w1, w2):
+    # 손실 함수에 가중치를 적용하여 계산
+    weighted_loss = w0 * loss0 + w1 * loss1 + w2 * loss2 + (w0/w1) + (w1/w2) + (w2/w0)
+    return weighted_loss
+
+# w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+
+optm = optim.Adam([{'params': model.parameters()}, {'params': [w0,w1,w2]}], lr=config['training']['learningRate'])
+
+
     
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
@@ -133,7 +155,6 @@ for epoch in range(nEpoch):
         
         if args.cla == 3:
             label = labels.reshape(-1,3)
-
         elif args.cla == 4:
             labels = labels.reshape(-1,3)
             energys = energy.reshape(-1,1)
@@ -144,27 +165,49 @@ for epoch in range(nEpoch):
 
         pred = model(data)
 
-        
         if args.loss == 'mse':
             crit = torch.nn.MSELoss()
         elif args.loss == 'mae':
             crit = torch.nn.L1Loss()
         elif args.loss == 'logcosh':
             crit = LogCoshLoss()
-        elif args.loss == 'maxabs3':
-            crit = MaxABSLoss3()
-        elif args.loss == 'maxabs4':
-            crit = MaxABSLoss4()
+        elif args.loss == 'maxabs':
+            crit = MaxABSLoss()
+        elif args.loss == 'msedistance':
+            crit = Msedistance()
+        elif args.loss == 'eculidean':
+            crit = EuclideanDistanceLoss()
+        elif args.loss =='weight':
+            crit = torch.nn.MSELoss()
 
-        
+        if args.cla == 4:
+            crit1 = torch.nn.MSELoss()
+            crit2 = LogCoshLoss()
+            loss1 = crit1(pred[:,:3],label[:,:3])
+            loss2 = crit2(pred[:,3],label[:,3])
+            loss = loss1 + loss2
 
+        elif args.loss == 'weight':
+            loss0 = crit(pred[:,0],label[:,0])
+            loss1 = crit(pred[:,1],label[:,1])
+            loss2 = crit(pred[:,2],label[:,2])
+            
+#             w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+            optm.zero_grad()
+#             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
+            loss = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
 
-        loss = crit(pred, label)
-        loss.backward()
-
-        optm.step()
-        optm.zero_grad()
-
+            loss.backward(retain_graph=True)
+            optm.step()
+            
+        else:
+            loss = crit(pred, label)
+            
+         ###기존       
+#         loss.backward()
+#         optm.step()
+#         optm.zero_grad()
+      
 
         ibatch = len(label)
         nProcessed += ibatch
@@ -205,8 +248,26 @@ for epoch in range(nEpoch):
         elif args.loss == 'maxabs':
             crit = MaxABSLoss()
 
+        elif args.loss == 'msedistance':
+            crit = Msedistance()
+        elif args.loss == 'eculidean':
+            crit = EuclideanDistanceLoss()
+        elif args.loss =='weight':
+            crit = torch.nn.MSELoss()
 
-        loss = crit(pred, label)
+            
+        if args.loss == 'weight':
+            loss0 = crit(pred[:,0],label[:,0])
+            loss1 = crit(pred[:,1],label[:,1])
+            loss2 = crit(pred[:,2],label[:,2])
+
+#             w1_normalized, w2_normalized, w3_normalized = normalize_weights(w0, w1, w2)
+#             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
+            loss = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
+
+        else:
+            loss = crit(pred, label)
+
 
         
         ibatch = len(label)
