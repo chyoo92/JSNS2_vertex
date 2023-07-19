@@ -2,11 +2,12 @@
 
 ## Install Conda
 ~~~
+## ver.20230707
 ## conda version 22.9.0
 ## python 3.9
 ## pytorch 1.13.0 version
 ## CUDA 11.7
-## install pyg 2.3.1
+## pytorch geometric 2.3.1
 
 ## Main library
 conda create -n env_name python=3.9
@@ -28,48 +29,72 @@ pip install pandas==1.5.3  ## pandas >= 2.0.0 version can't use 'append' so use 
 
 pip install uproot
 
-conda install -c conda-forge root  ## 
+conda install -c conda-forge root
 
 
 ############################################################################################### 
-Most installations are done using pip rather than conda.
-Due to the conda version issue, installation does not work properly when done with conda.
-Only the root user installed using conda.
+Most installations are done using pip.
+Due to the conda version issue(old version), 
+installation does not work properly when installed with conda.
+Only the ROOT installed with conda.
 If the conda version is up to date, there should be no issues with installing using conda.
 ###############################################################################################
 ~~~
 
-## Run option
-    
-    --config : config file (ex. config.yaml)
-    --output / -o : output folder name (ex. test)
-    --device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
-    --epoch : train epoch num
+
+## Run option 
+~~~
+--config : config file (ex. config.yaml)
+--output / -o : output folder name (ex. test)
+--device : choice gpu or cpu (ex. 0 or 1 or 2 ....  / cpu : -1)
+--epoch : train epoch num
     --batch : train batch size
-    --lr : learning rate
-    --seed : data split random number
-    --fea : input data feature num (ex. waveform : 248 / charge : 1)
-    --cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
-    --geo : detector geometry (for load PMTs position infor)| 1 = jsns2 96PMTs / 2 = jsns2 120PMTs
-    --itype : input feature type 1,2,3(wave form high, low, sum) 0 = pmt charge
-    --tev : sample info saving 1 = training , 0 = evaluation
-    --edge : dgcnn layer Number of nearest neighbors
-    --aggr : The aggregation operator The aggregation operator "add","mean","max"
-    --depths : dgcnn Number of layers
-    --pools : global pool max 0 / mean 1
+--lr : learning rate
+--seed : data split random number
+--fea : input data feature num (ex. waveform : 248 / charge : 1 / self-attention : 4)
+--cla : output feature num (ex. classification - 1 / regression(vertex) - 3)
+--geo : detector geometry (for load PMTs position infor)| 1 = jsns2 96PMTs / 2 = jsns2 120PMTs
+--itype : input feature type 1,2,3(wave form high, low, sum) 0 = pmt charge
+--tev : sample info saving 1 = training , 0 = evaluation
+--edge : dgcnn layer Number of nearest neighbors
+--aggr : The aggregation operator The aggregation operator "add","mean","max"
+--loss : loss type
+--depths : Number of layers (blocks)
+--pools : global pool max 0 / mean 1
+
+--model : train model
+~~~
+
+## Run script example
+
+~~~
+python train_model.py --config config_name.yaml -o output --device # --epoch # 
+                    --batch # --lr # --seed # --model model_name --geo # 
+                    --itype # --tev 1 --fea # --pools # --aggr operator 
+                    --cla # --edge # --loss loss_type --depths # 
+
+python eval_model.py --config config_name.yaml -o output --device # --seed # 
+                    --batch # --geo # --itype # --tev 0 --cla #
+~~~
+
+## Self-attention model (Testing... / No GNN)
+~~~
+## train_model_tf.py file
+## evaluation same as GNN (eval_model.py)
+-- hidden / heads / posfeed / dropout : self-attention block option
+
+## example
+python train_model_tf.py --config config_name.yaml -o output --device # --epoch # 
+                        --batch # --lr # --seed # --model model_name --geo # 
+                        --itype # --tev 1 --cla # --depths # --loss loss_type 
+                        --hidden # --heads # --posfeed # --dropout # --fea #
 
 
-    --model : train model
+~~~
 
-### Run script example
-    python train_model.py --config config_name.yaml -o output --device # --epoch # --batch # --lr # --seed # --model model_name --geo # --itype # --tev 1 --fea # --pools # --aggr operator --cla # --edge # --depths # 
+## python folder
 
-    python eval_model.py --config config_name.yaml -o output --device # --seed # --batch # --geo # --itype # --tev 0 --cla #
-
-
-### python folder
-
-- python/model : GNN models
+- python/model : Model
 
 - python/dataset/vertexdataset.py : dataset processing script
 
@@ -77,9 +102,7 @@ If the conda version is up to date, there should be no issues with installing us
 
 
 
-
-
-
+## Etc file...
 
 ### config file
 data path / split fraction / etc....

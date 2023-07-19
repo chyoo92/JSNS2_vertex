@@ -26,18 +26,14 @@ sys.path.append("./python")
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', action='store', type=str, default='config.yaml', help='Configration file with sample information')
 parser.add_argument('-o', '--output', action='store', type=str, required=True, help='Path to output file')
-
 parser.add_argument('-a', '--all', action='store_true', help='use all events for the evaluation, no split')
-parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
-
 parser.add_argument('--device', action='store', type=int, default=0, help='device name')
-parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
 parser.add_argument('--seed', action='store', type=int, default=12345, help='random seed')
+parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
 parser.add_argument('--geo', action='store', type=int, default=1, help='geometry')
 parser.add_argument('--itype', action='store', type=int, default=1, help='input data type 0=charge, 1=high, 2 = low, 3=sum')
 parser.add_argument('--tev', action='store', type=int, default=1, help='sample info saving 1 = training , 0 = evaluation')
-
-
+parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
 args = parser.parse_args()
 
 config = yaml.load(open(args.config).read(), Loader=yaml.FullLoader)

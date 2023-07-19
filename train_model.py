@@ -111,27 +111,38 @@ with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write(str(model))
     fout.close()
 
-    
-w0 = torch.tensor(0.5, requires_grad=True)
-w1 = torch.tensor(0.3, requires_grad=True)
-w2 = torch.tensor(0.2, requires_grad=True)
-# torch.autograd.set_detect_anomaly(True)    
-# def normalize_weights(w0, w1, w2):
-#     # 가중치 정규화
-#     total_weight = w0 + w1 + w2
-#     w0_normalized = w0 / total_weight
-#     w1_normalized = w1 / total_weight
-#     w2_normalized = w2 / total_weight
-#     return w0_normalized, w1_normalized, w2_normalized
+if args.loss =='weight':  
+    w0 = torch.tensor(0.5, requires_grad=True)
+    w1 = torch.tensor(0.3, requires_grad=True)
+    w2 = torch.tensor(0.2, requires_grad=True)
 
-def weighted_loss(loss0, loss1, loss2, w0, w1, w2):
-    # 손실 함수에 가중치를 적용하여 계산
-    weighted_loss = w0 * loss0 + w1 * loss1 + w2 * loss2 + (w0/w1) + (w1/w2) + (w2/w0)
-    return weighted_loss
+    def weighted_loss(loss0, loss1, loss2, w0, w1, w2):
+        # 손실 함수에 가중치를 적용하여 계산
+        weighted_loss = w0 * loss0 + w1 * loss1 + w2 * loss2 + (w0/w1) + (w1/w2) + (w2/w0)
+        return weighted_loss, w0, w1, w2
 
-# w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+    # w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
 
-optm = optim.Adam([{'params': model.parameters()}, {'params': [w0,w1,w2]}], lr=config['training']['learningRate'])
+    optm = optim.Adam([{'params': model.parameters()}, {'params': [w0,w1,w2]}], lr=config['training']['learningRate'])
+
+
+elif args.loss =='weight2':  
+    w0 = torch.tensor(0.5, requires_grad=True)
+    w1 = torch.tensor(0.3, requires_grad=True)
+    w2 = torch.tensor(0.2, requires_grad=True)
+
+    def weighted_loss2(loss00, loss0, loss1, loss2, w0, w1, w2):
+        # 손실 함수에 가중치를 적용하여 계산
+        weighted_loss =loss00 + w0 * loss0 + w1 * loss1 + w2 * loss2 + (w0/w1) + (w1/w2) + (w2/w0)
+        return weighted_loss, w0, w1, w2
+
+    # w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+
+    optm = optim.Adam([{'params': model.parameters()}, {'params': [w0,w1,w2]}], lr=config['training']['learningRate'])
+
+
+else:
+    optm = optim.Adam({'params': model.parameters()}, lr=config['training']['learningRate'])
 
 
     
@@ -139,6 +150,8 @@ from sklearn.metrics import accuracy_score
 from tqdm import tqdm
 bestState, bestLoss = {}, 1e9
 train = {'loss':[], 'val_loss':[]}
+wweight = {'w00':[],'w01':[],'w02':[],
+           'w10':[],'w11':[],'w12':[]}
 nEpoch = config['training']['epoch']
 for epoch in range(nEpoch):
     model.train()
@@ -152,6 +165,7 @@ for epoch in range(nEpoch):
         labels = data.y.float().to(device=device) ### vertex
         j_energy = data.jae.float().to(device=device)
         energy = data.tre.float().to(device=device)    
+        
         
         if args.cla == 3:
             label = labels.reshape(-1,3)
@@ -179,6 +193,8 @@ for epoch in range(nEpoch):
             crit = EuclideanDistanceLoss()
         elif args.loss =='weight':
             crit = torch.nn.MSELoss()
+        elif args.loss =='weight2':
+            crit = torch.nn.MSELoss()
 
         if args.cla == 4:
             crit1 = torch.nn.MSELoss()
@@ -195,11 +211,22 @@ for epoch in range(nEpoch):
 #             w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
             optm.zero_grad()
 #             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
-            loss = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
+            loss, ww00, ww01, ww02 = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
+            loss.backward(retain_graph=True)
+            optm.step()
+        elif args.loss == 'weight2':
+            loss0 = crit(pred[:,0],label[:,0])
+            loss1 = crit(pred[:,1],label[:,1])
+            loss2 = crit(pred[:,2],label[:,2])
+            loss00 = crit(pred, label)
+#             w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+            optm.zero_grad()
+#             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
+            loss, ww00, ww01, ww02 = weighted_loss2(loss00, loss0, loss1, loss2, w0, w1, w2)
 
             loss.backward(retain_graph=True)
             optm.step()
-            
+                     
         else:
             loss = crit(pred, label)
             
@@ -227,6 +254,8 @@ for epoch in range(nEpoch):
         labels = data.y.float().to(device=device)
         j_energy = data.jae.float().to(device=device)
         energy = data.tre.float().to(device=device)
+        
+
 
         if args.cla == 3:
             label = labels.reshape(-1,3)
@@ -254,6 +283,8 @@ for epoch in range(nEpoch):
             crit = EuclideanDistanceLoss()
         elif args.loss =='weight':
             crit = torch.nn.MSELoss()
+        elif args.loss =='weight2':
+            crit = torch.nn.MSELoss()
 
             
         if args.loss == 'weight':
@@ -263,8 +294,19 @@ for epoch in range(nEpoch):
 
 #             w1_normalized, w2_normalized, w3_normalized = normalize_weights(w0, w1, w2)
 #             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
-            loss = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
+            loss, ww10, ww11, ww12 = weighted_loss(loss0, loss1, loss2, w0, w1, w2)
+        elif args.loss == 'weight2':
+            loss0 = crit(pred[:,0],label[:,0])
+            loss1 = crit(pred[:,1],label[:,1])
+            loss2 = crit(pred[:,2],label[:,2])
+            loss00 = crit(pred, label)
+#             w0_normalized, w1_normalized, w2_normalized = normalize_weights(w0, w1, w2)
+            optm.zero_grad()
+#             loss = weighted_loss(loss0, loss1, loss2, w0_normalized, w1_normalized, w2_normalized)
+            loss, ww10, ww11, ww12 = weighted_loss2(loss00, loss0, loss1, loss2, w0, w1, w2)
 
+            loss.backward(retain_graph=True)
+            optm.step()
         else:
             loss = crit(pred, label)
 
@@ -284,7 +326,14 @@ for epoch in range(nEpoch):
         torch.save(bestState, os.path.join('result/' + args.output, 'weight.pth'))
 
         model.to(device)
-
+    wweight['w00'].append(ww00)
+    wweight['w01'].append(ww01)
+    wweight['w02'].append(ww02)
+    wweight['w10'].append(ww10)
+    wweight['w11'].append(ww11)
+    wweight['w12'].append(ww12)
+    
+    
     train['loss'].append(trn_loss)
     train['val_loss'].append(val_loss)
 
@@ -294,6 +343,15 @@ for epoch in range(nEpoch):
         writer.writerow(keys)
         for row in zip(*[train[key] for key in keys]):
             writer.writerow(row)
+    
+    
+    with open(os.path.join('result/' + args.output, 'balance.csv'), 'w') as f:
+        writer = csv.writer(f)
+        keys = wweight.keys()
+        writer.writerow(keys)
+        for row in zip(*[wweight[key] for key in keys]):
+            writer.writerow(row)
+
 
 bestState = model.to('cpu').state_dict()
 torch.save(bestState, os.path.join('result/' + args.output, 'weightFinal.pth'))
