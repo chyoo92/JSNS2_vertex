@@ -1,0 +1,7 @@
+result/
+*.csv
+python/old_config_file
+python/old_mc_data
+python/model/old_model
+for_copy
+*.out
